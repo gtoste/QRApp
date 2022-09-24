@@ -22,4 +22,5 @@
     <string name="scan">scan</string>
     <string name="size">size of created images</string>
     <string name="save">save</string>
+    <string name="path">path</string>
 </resources>

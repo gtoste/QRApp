@@ -1,8 +1,10 @@
 package com.example.qrapp;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.View;
 import android.view.Menu;
 import android.view.inputmethod.InputMethodManager;
@@ -25,6 +27,8 @@ import com.google.zxing.MultiFormatWriter;
 import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
+
+import java.io.File;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -50,13 +54,25 @@ public class MainActivity extends AppCompatActivity {
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_barqr, R.id.nav_barcode, R.id.nav_qrcode)
+                R.id.nav_barqr, R.id.nav_barcode, R.id.nav_qrcode, R.id.nav_settings)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+        SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
+        if(!settings.contains("initialized"))
+        {
+            File mainDictionary = Environment.getExternalStoragePublicDirectory( Environment.DIRECTORY_PICTURES );
+
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("initialized", true);
+            editor.putString("theme", "light");
+            editor.putString("img_src", mainDictionary.getPath());
+            editor.putInt("img_width", 350);
+            editor.apply();
+        }
     }
 
 

@@ -1,9 +1,13 @@
 package com.example.qrapp.ui.BarQrUI;
 
+import static android.content.Context.MODE_PRIVATE;
+
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +28,8 @@ import com.journeyapps.barcodescanner.ScanOptions;
 public class BarQrFragment extends Fragment {
 
     private FragmentBarqrBinding binding;
+    private String theme;
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -32,6 +38,10 @@ public class BarQrFragment extends Fragment {
 
         binding = FragmentBarqrBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+
+        SharedPreferences settings = getActivity().getSharedPreferences("settings", MODE_PRIVATE);
+        this.theme = settings.getString("theme", null);
+        root.setBackgroundColor(this.theme.equals("light") ? Color.WHITE : Color.DKGRAY);
 
         binding.btnScan.setOnClickListener(view -> {
             ScanOptions options = new ScanOptions();
